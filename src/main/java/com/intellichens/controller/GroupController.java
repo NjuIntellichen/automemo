@@ -1,7 +1,7 @@
 package com.intellichens.controller;
 
 import com.intellichens.service.GroupService;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
