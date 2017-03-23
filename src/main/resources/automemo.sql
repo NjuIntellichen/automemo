@@ -1,0 +1,58 @@
+CREATE TABLE `user` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_name` VARCHAR(255) DEFAULT NULL,
+  `user_avatar` VARCHAR(255) DEFAULT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) DEFAULT NULL,
+  `phone` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) DEFAULT NULL,
+  `create_at` DATE NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `group` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `group_name` VARCHAR(255) NOT NULL ,
+  `group_avatar` VARCHAR(255) DEFAULT NULL,
+  `leader_id` INT(11) NOT NULL,
+  `people` INT DEFAULT 0,
+  `record` INT DEFAULT 0,
+  `description` TEXT DEFAULT NULL,
+  `create_at` DATE NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user_group` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_id` INT(11) NOT NULL ,
+  `group_id` INT(11) NOT NULL,
+  `state` INT DEFAULT 0,
+  `create_at` DATE NOT NULL,
+  CONSTRAINT `user_group_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_group_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `record` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_id` INT(11) NOT NULL ,
+  `group_id` INT(11) NOT NULL,
+  `content` TEXT NOT NULL,
+  `state` INT DEFAULT 0,
+  `create_at` DATE NOT NULL,
+  `topic` TEXT DEFAULT NULL,
+  CONSTRAINT `record_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `record_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tag` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `tag_name` VARCHAR(255) NOT NULL,
+  `record_id` INT(11) NOT NULL,
+  `info` VARCHAR(255) DEFAULT NULL,
+  `state` INT DEFAULT 0,
+  `create_at` DATE NOT NULL,
+  CONSTRAINT `tag_ibfk_1` FOREIGN KEY (`record_id`) REFERENCES `record` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
