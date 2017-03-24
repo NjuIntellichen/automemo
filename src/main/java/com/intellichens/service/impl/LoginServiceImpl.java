@@ -3,7 +3,6 @@ package com.intellichens.service.impl;
 import com.intellichens.dao.UserDAO;
 import com.intellichens.model.UserModel;
 import com.intellichens.service.LoginService;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
