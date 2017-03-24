@@ -36,8 +36,8 @@ public class GroupServiceImpl implements GroupService {
         //user 不存在
         if (userModel == null) return -2;
         UserGroupModel userGroupModel = new UserGroupModel();
-        userGroupModel.setGroupId(groupModel);
-        userGroupModel.setUserId(userModel);
+        userGroupModel.setGroupId(groupModel.getId());
+        userGroupModel.setUserId(userModel.getId());
         //0 - 待审核
         userGroupModel.setState(0);
         userGroupModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
@@ -84,7 +84,7 @@ public class GroupServiceImpl implements GroupService {
         UserGroupModel apply = new UserGroupModel();
 //                userGroupDAO.findByGroupAndUser(userId, groupId);
         if (apply == null) return -1;
-        GroupModel group = apply.getGroupId();
+        GroupModel group = groupDAO.findOne(apply.getGroupId());
         group.setPeople(group.getPeople()-1);
         groupDAO.saveAndFlush(group);
         userGroupDAO.delete(apply);
@@ -99,7 +99,7 @@ public class GroupServiceImpl implements GroupService {
         if (accept){
             apply.setState(1);
             userGroupDAO.saveAndFlush(apply);
-            GroupModel group = apply.getGroupId();
+            GroupModel group = groupDAO.findOne(apply.getGroupId());
             group.setPeople(group.getPeople()+1);
             groupDAO.saveAndFlush(group);
         } else {

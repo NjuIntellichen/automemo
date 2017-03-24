@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * Created by raychen on 2017/3/22.
  */
-@Repository
 public interface RecordDAO extends JpaRepository<RecordModel, Integer>{
 //    @Query("select r from RecordModel r where r.group.id=:gid and r.user.id=:uid")
 //    List<RecordModel> findRecordsByUserAndGroup(@Param("uid") Integer uid, @Param("gid") Integer gid);
+    List<RecordModel> findByUserId(Integer id);
 }

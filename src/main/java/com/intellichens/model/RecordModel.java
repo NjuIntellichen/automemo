@@ -5,22 +5,33 @@ import java.sql.Date;
 import java.util.List;
 
 /**
- * Created by raychen on 2017/3/23.
+ *
+ * @author raychen, cheney
+ * @date 2017/3/23
+ * @version V1.0
  */
 @Entity
-@Table(name = "record", schema = "automemo_test", catalog = "")
+@Table(name = "record")
 public class RecordModel {
-    private int id;
-    private String content;
-    private Integer state;
-    private Date createAt;
-    private String topic;
-    private GroupModel groupId;
-    private UserModel userId;
-    private List<TagModel> tags;
-
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue
+    private int id;
+
+    private String content;
+
+    private Integer state;
+
+    @Column(name = "create_at")
+    private Date createAt;
+
+    private String topic;
+
+    @Column(name = "group_id")
+    private int groupId;
+
+    @Column(name = "user_id")
+    private int userId;
+
     public int getId() {
         return id;
     }
@@ -29,8 +40,6 @@ public class RecordModel {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "content", nullable = false, length = -1)
     public String getContent() {
         return content;
     }
@@ -39,8 +48,6 @@ public class RecordModel {
         this.content = content;
     }
 
-    @Basic
-    @Column(name = "state", nullable = true)
     public Integer getState() {
         return state;
     }
@@ -49,8 +56,6 @@ public class RecordModel {
         this.state = state;
     }
 
-    @Basic
-    @Column(name = "create_at", nullable = false)
     public Date getCreateAt() {
         return createAt;
     }
@@ -59,8 +64,6 @@ public class RecordModel {
         this.createAt = createAt;
     }
 
-    @Basic
-    @Column(name = "topic", nullable = true, length = -1)
     public String getTopic() {
         return topic;
     }
@@ -69,58 +72,19 @@ public class RecordModel {
         this.topic = topic;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RecordModel that = (RecordModel) o;
-
-        if (id != that.id) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
-        if (createAt != null ? !createAt.equals(that.createAt) : that.createAt != null) return false;
-        if (topic != null ? !topic.equals(that.topic) : that.topic != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
-        result = 31 * result + (createAt != null ? createAt.hashCode() : 0);
-        result = 31 * result + (topic != null ? topic.hashCode() : 0);
-        return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false)
-    public GroupModel getGroupId() {
+    public int getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(GroupModel groupId) {
+    public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    public UserModel getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(UserModel userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    @OneToMany(mappedBy = "recordId")
-    public List<TagModel> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<TagModel> tags) {
-        this.tags = tags;
     }
 }

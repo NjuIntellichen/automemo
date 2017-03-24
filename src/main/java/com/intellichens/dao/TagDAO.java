@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 /**
  * Created by raychen on 2017/3/22.
  */
-@Repository
 public interface TagDAO extends JpaRepository<TagModel, Integer> {
 }
