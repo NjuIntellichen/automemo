@@ -1,7 +1,7 @@
 package com.intellichens.controller;
 
 import com.intellichens.service.LoginService;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
