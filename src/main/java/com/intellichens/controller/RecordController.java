@@ -20,14 +20,14 @@ public class RecordController {
     private RecordService recordService;
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public JSONObject createRecord(@RequestParam("gid") Integer gid,
+    public String createRecord(@RequestParam("gid") Integer gid,
                                    @RequestParam("content") String text,
                                    HttpSession session){
-        JSONObject ret = new JSONObject();
+//        JSONObject ret = new JSONObject();
         Integer uid = (Integer) session.getAttribute("user");
         int res = recordService.createRecord(uid, gid, text);
-        ret.put("res", res);
-        return ret;
+//        ret.put("res", res);
+        return String.valueOf(res);
     }
 
 }

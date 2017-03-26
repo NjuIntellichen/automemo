@@ -35,12 +35,12 @@ public class LoginController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject register(@RequestParam("phone") String phone,
+    public String register(@RequestParam("phone") String phone,
                             @RequestParam("pwd") String pwd) {
         int res = loginService.register(phone, pwd);
-        JSONObject ret = new JSONObject();
-        ret.put("res", res);
-        return ret;
+//        JSONObject ret = new JSONObject();
+//        ret.put("res", res);
+        return String.valueOf(res);
     }
 
     @RequestMapping("/hello")
