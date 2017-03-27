@@ -2,13 +2,16 @@ package com.intellichens.api.impl;
 
 import com.intellichens.api.HttpBuilder;
 import com.intellichens.api.SpeechTranslateAPI;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
@@ -23,13 +26,13 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
     private static final String RECOGNIZE_URI = "https://speech.platform.bing.com/recognize";
 
     @Override
-    public StringBuilder translateSpeech(String fileName) {
-        StringBuilder stringBuilder = null;
+    public String translateSpeech(String fileName) {
         try {
             URI PreUri = this.initURI(PRE_REG_URI).build();
             HttpPost preRequest = new HttpPost(PreUri);
             this.setHeader(preRequest);
 
+            // get token
             HttpResponse PreResponse = this.httpClient.execute(preRequest);
             String token =  EntityUtils.toString(PreResponse.getEntity());
 
@@ -37,7 +40,7 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
             String scenarios = "ulm";
             String appid = "D4D52672-91D7-4C74-8AD8-42B1D98141A5";
             String locale = "en-US";
-            String deviceOs = "centOS";
+            String deviceOs = "macOS";
             String version = "3.0";
             String format = "json";
             String requestId = UUID.randomUUID().toString();
@@ -53,7 +56,59 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
                     .setParameter("instanceid",requestId)
                     .build();
 
+            HttpPost request= new HttpPost(uri);
+            request.setHeader("Content-Type","audio/wav; samplerate=16000");
+            request.setHeader("Authorization","Bearer "+token);
 
+            // set binary data from voice file
+            File file = new File(fileName);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            if(file.exists()) {
+                InputStream is = new BufferedInputStream(new FileInputStream(file));
+                byte[] b = new byte[1024];
+                int len;
+                while((len = is.read(b, 0, b.length)) != -1){
+                    baos.write(b, 0, len);
+                }
+                baos.flush();
+                is.close();
+
+            }
+
+            else {
+                System.err.println("file not exist");
+                return null;
+            }
+
+            HttpEntity entity = new ByteArrayEntity(baos.toByteArray());
+            request.setEntity(entity);
+
+            // get result
+            HttpResponse response = httpClient.execute(request);
+            int responseCode = response.getStatusLine().getStatusCode();
+            System.out.println(responseCode);
+            if(responseCode!=200){
+                System.err.println("response error");
+                return null;
+            }
+
+            StringBuilder stringBuilder = new StringBuilder();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String line;
+            while ((line = rd.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+
+            // analyze result
+            JSONObject json = new JSONObject(stringBuilder.toString());
+            JSONObject header = (JSONObject) json.get("header");
+            if("success".equals(header.get("status").toString())){
+                return header.get("lexical").toString();
+            }
+            else {
+                System.err.println("result is unsuccessful");
+                return null;
+            }
 
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -62,7 +117,7 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return stringBuilder;
+        return null;
     }
 
     @Override
@@ -71,8 +126,10 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
         base.setHeader("Ocp-Apim-Subscription-Key", "ee65337b917143b9be9f397daed75b6c");
     }
 
-    private void setRegHeader(HttpRequestBase base){
-        base.setHeader("Content-Type","audio/wav; samplerate=16000");
-        base.setHeader("Authorization","audio/wav; samplerate=16000");
+    public static void main(String[] args) {
+        String fileName = "/Users/yuminchen/Desktop/1.wav";
+        System.out.println(new SpeechTranslateImpl().translateSpeech(fileName));
+
     }
+
 }

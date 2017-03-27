@@ -6,5 +6,5 @@ package com.intellichens.api;
  * @date 2017/3/26
  */
 public interface SpeechTranslateAPI {
-    StringBuilder translateSpeech(String fileName);
+    String translateSpeech(String fileName);
 }
