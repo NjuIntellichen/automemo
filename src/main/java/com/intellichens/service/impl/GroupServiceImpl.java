@@ -21,12 +21,16 @@ import java.util.List;
 @Service
 public class GroupServiceImpl implements GroupService {
 
+    private final UserDAO userDAO;
+    private final GroupDAO groupDAO;
+    private final UserGroupDAO userGroupDAO;
+
     @Autowired
-    private UserDAO userDAO;
-    @Autowired
-    private GroupDAO groupDAO;
-    @Autowired
-    private UserGroupDAO userGroupDAO;
+    public GroupServiceImpl(UserDAO userDAO, GroupDAO groupDAO, UserGroupDAO userGroupDAO) {
+        this.userDAO = userDAO;
+        this.groupDAO = groupDAO;
+        this.userGroupDAO = userGroupDAO;
+    }
 
     @Override
     public int applyGroup(Integer userId, Integer groupId) {

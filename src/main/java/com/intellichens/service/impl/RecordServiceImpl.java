@@ -95,12 +95,12 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<RecordModel> getUserRecords(Integer userId) {
-        return recordDAO.findRecordsByUser(userId);
+        return recordDAO.findRecordsByUserId(userId);
     }
 
     @Override
     public List<RecordModel> getGroupRecords(Integer groupId) {
-        return recordDAO.findRecordsByGroup(groupId);
+        return recordDAO.findRecordsByGroupId(groupId);
     }
 
     @Override

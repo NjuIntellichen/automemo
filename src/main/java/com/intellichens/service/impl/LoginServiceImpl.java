@@ -9,13 +9,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Created by raychen on 2017/3/21.
+ *
+ * @author raychen, cheney
+ * @date 2017/3/21
+ * @version V1.0
  */
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    private final UserDAO userDAO;
+
     @Autowired
-    private UserDAO userDAO;
+    public LoginServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
     public int login(String phone, String pwd) {

@@ -12,12 +12,10 @@ import java.util.List;
  */
 public interface GroupDAO extends JpaRepository<GroupModel, Integer>{
 
-    @Query("select g from GroupModel g join UserGroupModel ug on g.id=ug.groupId where ug.userId=:id")
+    @Query("select g from GroupModel g, UserGroupModel ug where g.id=ug.groupId and ug.userId=:id")
     List<GroupModel> findGroupsByUserId(@Param("id") Integer id);
 
-    @Query("select g from GroupModel g where g.leaderId = :id")
     List<GroupModel> findGroupByLeaderId(@Param("id") Integer id);
 
-    @Query("select g from GroupModel g where g.groupId = :id")
     GroupModel findGroupByGroupId(@Param("id") Integer id);
 }

@@ -13,10 +13,10 @@ import java.util.List;
  */
 public interface RecordDAO extends JpaRepository<RecordModel, Integer>{
 
-    @Query("select r from RecordModel r where r.userId=:uid")
-    List<RecordModel> findRecordsByUser(@Param("uid") Integer uid);
+//    @Query("select r from RecordModel r where r.userId=:uid")
+    List<RecordModel> findRecordsByUserId(@Param("uid") Integer uid);
 
-    @Query("select r from RecordModel r where r.groupId=:gid")
-    List<RecordModel> findRecordsByGroup(@Param("gid") Integer gid);
+//    @Query("select r from RecordModel r where r.groupId=:gid")
+    List<RecordModel> findRecordsByGroupId(@Param("gid") Integer gid);
 
 }

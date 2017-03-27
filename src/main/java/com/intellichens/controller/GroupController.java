@@ -4,7 +4,7 @@ import com.intellichens.model.GroupModel;
 import com.intellichens.model.UserGroupModel;
 import com.intellichens.service.GroupService;
 import com.intellichens.util.ResultUtil;
-import com.intellichens.util.TestUtil;
+//import com.intellichens.util.TestUtil;
 import com.intellichens.util.model_util.ApplyUtil;
 import com.intellichens.util.model_util.GroupUtil;
 import org.json.simple.JSONArray;
