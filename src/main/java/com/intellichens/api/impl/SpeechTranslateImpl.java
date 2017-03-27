@@ -27,6 +27,28 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
 
     @Override
     public String translateSpeech(String fileName) {
+
+        // set binary data from voice file
+        File file = new File(fileName);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            InputStream is = new BufferedInputStream(new FileInputStream(file));
+            byte[] b = new byte[1024];
+            int len;
+            while((len = is.read(b, 0, b.length)) != -1){
+                baos.write(b, 0, len);
+            }
+            baos.flush();
+            is.close();
+
+        }catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return translateSpeech(baos.toByteArray());
+    }
+
+    @Override
+    public String translateSpeech(byte[] speechStream) {
         try {
             URI PreUri = this.initURI(PRE_REG_URI).build();
             HttpPost preRequest = new HttpPost(PreUri);
@@ -54,33 +76,14 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
                     .setParameter("format", format)
                     .setParameter("requestid", requestId)
                     .setParameter("instanceid",requestId)
+                    .setParameter("maxnbest","3")
                     .build();
 
             HttpPost request= new HttpPost(uri);
             request.setHeader("Content-Type","audio/wav; samplerate=16000");
             request.setHeader("Authorization","Bearer "+token);
 
-            // set binary data from voice file
-            File file = new File(fileName);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            if(file.exists()) {
-                InputStream is = new BufferedInputStream(new FileInputStream(file));
-                byte[] b = new byte[1024];
-                int len;
-                while((len = is.read(b, 0, b.length)) != -1){
-                    baos.write(b, 0, len);
-                }
-                baos.flush();
-                is.close();
-
-            }
-
-            else {
-                System.err.println("file not exist");
-                return null;
-            }
-
-            HttpEntity entity = new ByteArrayEntity(baos.toByteArray());
+            HttpEntity entity = new ByteArrayEntity(speechStream);
             request.setEntity(entity);
 
             // get result
@@ -99,6 +102,7 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
                 stringBuilder.append(line);
             }
 
+            System.out.println(stringBuilder.toString());
             // analyze result
             JSONObject json = new JSONObject(stringBuilder.toString());
             JSONObject header = (JSONObject) json.get("header");
@@ -127,7 +131,8 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
     }
 
     public static void main(String[] args) {
-        String fileName = "/Users/yuminchen/Desktop/1.wav";
+        String fileName = "/Users/yuminchen/Desktop/3.wav";
+        System.out.println();
         System.out.println(new SpeechTranslateImpl().translateSpeech(fileName));
 
     }

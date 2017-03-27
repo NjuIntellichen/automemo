@@ -7,4 +7,6 @@ package com.intellichens.api;
  */
 public interface SpeechTranslateAPI {
     String translateSpeech(String fileName);
+
+    String translateSpeech(byte[] speechStream);
 }
