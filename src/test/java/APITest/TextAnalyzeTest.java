@@ -32,4 +32,11 @@ public class TextAnalyzeTest {
             }
         }
     }
+
+    @Test
+    public void testSentiment(){
+        String text = "The original and reference implementation Java compilers, virtual machines, and class libraries were originally released by Sun under proprietary licences. As of May 2007, in compliance with the specifications of the Java Community Process, Sun relicensed most of its Java technologies under the GNU General Public License. Others have also developed alternative implementations of these Sun technologies, such as the GNU Compiler for Java (bytecode compiler), GNU Classpath (standard libraries), and IcedTea-Web (browser plugin for applets).";
+        String sentiment = api.getSentiment(text);
+        System.out.println(sentiment);
+    }
 }

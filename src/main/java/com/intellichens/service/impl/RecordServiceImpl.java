@@ -52,6 +52,8 @@ public class RecordServiceImpl implements RecordService {
         recordModel.setContent(text);
         recordModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
         recordDAO.saveAndFlush(recordModel);
+        groupModel.setRecord(groupModel.getRecord()+1);
+        groupDAO.saveAndFlush(groupModel);
         return 1;
     }
 
@@ -67,6 +69,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public int removeRecord(Integer recordId) {
+        RecordModel record = recordDAO.findOne(recordId);
+        GroupModel groupModel = groupDAO.findOne(record.getGroupId());
+        groupModel.setRecord(groupModel.getRecord()-1);
+        groupDAO.saveAndFlush(groupModel);
         recordDAO.delete(recordId);
         return 1;
     }
@@ -75,6 +81,7 @@ public class RecordServiceImpl implements RecordService {
     public int createTags(Integer recordId, List<String> tags) {
         RecordModel recordModel = recordDAO.findOne(recordId);
         if (recordModel == null) return -1;
+        if (tags.size() == 0) return -2;
         for (String tag: tags) {
             TagModel tagModel = new TagModel();
             tagModel.setTagName(tag);
@@ -87,15 +94,22 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<RecordModel> getRecords(Integer userId) {
-        UserModel user = userDAO.findOne(userId);
-        if(user==null) return null;
-        return recordDAO.findByUserId(user.getId());
+    public List<RecordModel> getUserRecords(Integer userId) {
+        return recordDAO.findRecordsByUser(userId);
     }
 
     @Override
-    public List<RecordModel> getRecords(Integer userId, Integer groupId) {
-//        return recordDAO.findRecordsByUserAndGroup(userId, groupId);
-        return null;
+    public List<RecordModel> getGroupRecords(Integer groupId) {
+        return recordDAO.findRecordsByGroup(groupId);
+    }
+
+    @Override
+    public RecordModel getRecord(Integer groupId) {
+        return recordDAO.findOne(groupId);
+    }
+
+    @Override
+    public List<TagModel> getTags(Integer recordId) {
+        return tagDAO.findTagsByRecordId(recordId);
     }
 }

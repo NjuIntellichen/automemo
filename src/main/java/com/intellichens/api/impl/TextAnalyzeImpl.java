@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -21,6 +22,7 @@ public class TextAnalyzeImpl extends HttpBuilder implements TextAnalyzeAPI{
     private static final String languageURI = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/languages";
     private static final String topicURI = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/topics";
     private static final String keysURI = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases";
+    private static final String sentimentURI = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment";
 
     @Override
     public String getLanguage(String text, int languages){
@@ -63,6 +65,26 @@ public class TextAnalyzeImpl extends HttpBuilder implements TextAnalyzeAPI{
 
     @Override
     public String getTopic(List<String> docs) {
+        return null;
+    }
+
+    @Override
+    public String getSentiment(String text) {
+        try {
+            URI uri = this.initURI(sentimentURI)
+                    .build();
+            HttpPost request = new HttpPost(uri);
+            setHeader(request);
+            JSONObject obj = new JSONObject()
+                    .put("language", "en")
+                    .put("id", "test")
+                    .put("text", text);
+            request.setEntity(new StringEntity(this.getContent(obj).toString()));
+            HttpResponse response = httpClient.execute(request);
+            return EntityUtils.toString(response.getEntity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

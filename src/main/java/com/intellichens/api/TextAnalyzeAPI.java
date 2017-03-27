@@ -9,4 +9,5 @@ public interface TextAnalyzeAPI {
     String getLanguage(String text, int languages);
     String getKeys(String text);
     String getTopic(List<String> docs);
+    String getSentiment(String text);
 }

@@ -10,8 +10,9 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `group` (
+CREATE TABLE `my_group` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `group_id` INT(11) NOT NULL,
   `group_name` VARCHAR(255) NOT NULL ,
   `group_avatar` VARCHAR(255) DEFAULT NULL,
   `leader_id` INT(11) NOT NULL,
@@ -29,7 +30,7 @@ CREATE TABLE `user_group` (
   `state` INT DEFAULT 0,
   `create_at` DATE NOT NULL,
   CONSTRAINT `user_group_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_group_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_group_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `my_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -42,7 +43,7 @@ CREATE TABLE `record` (
   `create_at` DATE NOT NULL,
   `topic` TEXT DEFAULT NULL,
   CONSTRAINT `record_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `record_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `record_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `my_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 

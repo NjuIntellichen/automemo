@@ -20,7 +20,10 @@ public class GroupModel {
     @Column(name = "group_name")
     private String groupName;
 
-    @Column(name = "group_avator")
+    @Column(name = "group_id")
+    private Integer groupId;
+
+    @Column(name = "group_avatar")
     private String groupAvatar;
 
     @Column(name = "leader_id")
@@ -97,6 +100,15 @@ public class GroupModel {
 
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public Integer getGroupId() {
+
+        return groupId;
     }
 
     public GroupModel() {

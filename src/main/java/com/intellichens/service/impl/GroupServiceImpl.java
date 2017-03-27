@@ -7,6 +7,7 @@ import com.intellichens.model.GroupModel;
 import com.intellichens.model.UserGroupModel;
 import com.intellichens.model.UserModel;
 import com.intellichens.service.GroupService;
+import com.intellichens.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,10 +47,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<GroupModel> getGroups(Integer userId) {
-        if (userId == -1) return groupDAO.findAll();
-//        return groupDAO.getGroupsByUserId(userId);
-        return null;
+    public List<GroupModel> getJoinGroups(Integer userId) {
+        return groupDAO.findGroupsByUserId(userId);
+    }
+
+    @Override
+    public List<GroupModel> getCreGroups(Integer userId) {
+        return groupDAO.findGroupByLeaderId(userId);
     }
 
     @Override
@@ -61,6 +65,7 @@ public class GroupServiceImpl implements GroupService {
         groupModel.setDescription(description);
         groupModel.setGroupAvatar(groupAvatar);
         groupModel.setLeaderId(userId);
+        groupModel.setGroupId(RandomUtil.getRandomId());
         groupModel.setPeople(1);
         groupModel.setRecord(0);
         groupModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
@@ -81,8 +86,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public int dropGroup(Integer userId, Integer groupId) {
-        UserGroupModel apply = new UserGroupModel();
-//                userGroupDAO.findByGroupAndUser(userId, groupId);
+        UserGroupModel apply = userGroupDAO.findByGroupAndUser(userId, groupId);
         if (apply == null) return -1;
         GroupModel group = groupDAO.findOne(apply.getGroupId());
         group.setPeople(group.getPeople()-1);
@@ -92,9 +96,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public int doApply(Integer userId, Integer groupId, boolean accept) {
-        UserGroupModel apply = new UserGroupModel();
-//                userGroupDAO.findByGroupAndUser(userId, groupId);
+    public int doApply(Integer aid, boolean accept) {
+        UserGroupModel apply = userGroupDAO.findOne(aid);
         if (apply == null) return -1;
         if (accept){
             apply.setState(1);
@@ -108,4 +111,15 @@ public class GroupServiceImpl implements GroupService {
         }
         return 1;
     }
+
+    @Override
+    public GroupModel searchGroup(Integer gid) {
+        return groupDAO.findGroupByGroupId(gid);
+    }
+
+    @Override
+    public List<UserGroupModel> getApplies(Integer gid) {
+        return userGroupDAO.findUserGroupsByGroupId(gid);
+    }
+
 }

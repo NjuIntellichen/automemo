@@ -1,12 +1,14 @@
 package com.intellichens.controller;
 
+import com.intellichens.model.UserModel;
 import com.intellichens.service.LoginService;
+import com.intellichens.util.ResultUtil;
+import com.intellichens.util.model_util.UserUtil;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by raychen on 2017/3/21.
@@ -23,24 +25,23 @@ public class LoginController {
                             @RequestParam("pwd") String pwd,
                             HttpSession session) {
         int res = loginService.login(phone, pwd);
-        JSONObject ret = new JSONObject();
-        if (res >= 0){
-            session.setAttribute("user", res);
-            ret.put("res", 1);
-        } else {
-            ret.put("res", 0);
-        }
-        return ret;
+        if (res > 0) session.setAttribute("user", res);
+        return ResultUtil.wrapResult(res);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public String register(@RequestParam("phone") String phone,
+    public JSONObject register(@RequestParam("phone") String phone,
                             @RequestParam("pwd") String pwd) {
         int res = loginService.register(phone, pwd);
-//        JSONObject ret = new JSONObject();
-//        ret.put("res", res);
-        return String.valueOf(res);
+        return ResultUtil.wrapResult(res);
+    }
+
+    @RequestMapping(value = "/current", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject getUser(HttpSession session) {
+        UserModel user = loginService.getUser((Integer) session.getAttribute("user"));
+        return UserUtil.convertRecord(user);
     }
 
     @RequestMapping("/hello")
