@@ -6,6 +6,8 @@ import com.intellichens.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -44,6 +46,7 @@ public class LoginServiceImpl implements LoginService {
             UserModel user = new UserModel();
             user.setPhone(phone);
             user.setPassword(pwd);
+            user.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
             userDAO.saveAndFlush(user);
             return 1;
         }
