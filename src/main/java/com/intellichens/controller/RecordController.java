@@ -31,9 +31,9 @@ public class RecordController {
 
     @RequestMapping(value = "ready")
     @ResponseBody
-    public String readyRecord(@SessionAttribute Integer user){
+    public JSONObject readyRecord(@SessionAttribute Integer user){
         int recordId = recordService.createRecord(user);
-        return String.valueOf(recordId);
+        return ResultUtil.wrapResult(recordId);
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
@@ -46,7 +46,7 @@ public class RecordController {
         return ResultUtil.wrapResult(res);
     }
 
-    @RequestMapping(value = "records/group/{gid}", method = RequestMethod.GET)
+    @RequestMapping(value = "group/{gid}", method = RequestMethod.GET)
     @ResponseBody
     public JSONArray getGroupRecords(@PathVariable("gid") Integer gid){
         List<RecordModel> records = recordService.getGroupRecords(gid);
@@ -57,7 +57,7 @@ public class RecordController {
         return ret;
     }
 
-    @RequestMapping(value = "records/user/{uid}", method = RequestMethod.GET)
+    @RequestMapping(value = "user/{uid}", method = RequestMethod.GET)
     @ResponseBody
     public JSONArray getUserRecords(@PathVariable("uid") Integer uid){
         List<RecordModel> records = recordService.getUserRecords(uid);
@@ -68,18 +68,18 @@ public class RecordController {
         return ret;
     }
 
-    @RequestMapping(value = "record/{rid}", method = RequestMethod.GET)
+    @RequestMapping(value = "{rid}", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject getRecord(@PathVariable("rid") Integer rid){
         RecordModel record = recordService.getRecord(rid);
         return RecordUtil.convertRecord(record);
     }
 
-    @RequestMapping(value = "record/{rid}/tags", method = RequestMethod.POST)
+    @RequestMapping(value = "{rid}/tags", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addTags(@PathVariable("rid") Integer rid,
                               @RequestParam("tags") String tags){
-        String[] tagArr = tags.split("\\#");
+        String[] tagArr = tags.split("#");
         List<String> tagList = new ArrayList<String>();
         for (int i = 0; i < tagArr.length; i++) {
             tagList.add(tagArr[i]);
@@ -88,7 +88,7 @@ public class RecordController {
         return ResultUtil.wrapResult(res);
     }
 
-    @RequestMapping(value = "record/{rid}/drop", method = RequestMethod.POST)
+    @RequestMapping(value = "{rid}/drop", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject dropRecord(@PathVariable("rid") Integer rid){
         int res = recordService.removeRecord(rid);

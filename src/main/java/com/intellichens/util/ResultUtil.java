@@ -12,4 +12,10 @@ public class ResultUtil {
         obj.put("res", result);
         return obj;
     }
+
+    public static JSONObject wrapResult(String result){
+        JSONObject obj = new JSONObject();
+        obj.put("res", result);
+        return obj;
+    }
 }
