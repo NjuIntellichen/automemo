@@ -72,8 +72,7 @@ public class RecordServiceImpl implements RecordService {
         recordModel.setUserId(userModel.getId());
         recordModel.setState(RecordState.recording);
         recordModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
-        recordDAO.saveAndFlush(recordModel);
-        return 1;
+        return recordDAO.saveAndFlush(recordModel).getId();
     }
 
     @Override
