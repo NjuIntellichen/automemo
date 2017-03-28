@@ -9,6 +9,8 @@ import com.intellichens.model.RecordModel;
 import com.intellichens.model.TagModel;
 import com.intellichens.model.UserModel;
 import com.intellichens.service.RecordService;
+import com.intellichens.util.RecordState;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public int createRecord(Integer userId, Integer groupId, String text) {
+       return addRecord(userId,groupId,text,RecordState.finished);
+    }
+
+    private int addRecord(Integer userId, Integer groupId, String text, RecordState state){
         UserModel userModel = userDAO.findOne(userId);
         if (userModel == null) return -1;
         GroupModel groupModel = groupDAO.findOne(groupId);
@@ -48,11 +54,18 @@ public class RecordServiceImpl implements RecordService {
         RecordModel recordModel = new RecordModel();
         recordModel.setUserId(userModel.getId());
         recordModel.setGroupId(groupModel.getId());
-        recordModel.setState(1);
+        recordModel.setState(state);
         recordModel.setContent(text);
         recordModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
         recordDAO.saveAndFlush(recordModel);
+        groupModel.setRecord(groupModel.getRecord()+1);
+        groupDAO.saveAndFlush(groupModel);
         return 1;
+    }
+
+    @Override
+    public int createRecord(Integer userId) {
+        return addRecord(userId,0,"",RecordState.recording);
     }
 
     @Override
@@ -67,6 +80,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public int removeRecord(Integer recordId) {
+        RecordModel record = recordDAO.findOne(recordId);
+        GroupModel groupModel = groupDAO.findOne(record.getGroupId());
+        groupModel.setRecord(groupModel.getRecord()-1);
+        groupDAO.saveAndFlush(groupModel);
         recordDAO.delete(recordId);
         return 1;
     }
@@ -75,6 +92,7 @@ public class RecordServiceImpl implements RecordService {
     public int createTags(Integer recordId, List<String> tags) {
         RecordModel recordModel = recordDAO.findOne(recordId);
         if (recordModel == null) return -1;
+        if (tags.size() == 0) return -2;
         for (String tag: tags) {
             TagModel tagModel = new TagModel();
             tagModel.setTagName(tag);
@@ -87,15 +105,22 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<RecordModel> getRecords(Integer userId) {
-        UserModel user = userDAO.findOne(userId);
-        if(user==null) return null;
-        return recordDAO.findByUserId(user.getId());
+    public List<RecordModel> getUserRecords(Integer userId) {
+        return recordDAO.findRecordsByUserId(userId);
     }
 
     @Override
-    public List<RecordModel> getRecords(Integer userId, Integer groupId) {
-//        return recordDAO.findRecordsByUserAndGroup(userId, groupId);
-        return null;
+    public List<RecordModel> getGroupRecords(Integer groupId) {
+        return recordDAO.findRecordsByGroupId(groupId);
+    }
+
+    @Override
+    public RecordModel getRecord(Integer groupId) {
+        return recordDAO.findOne(groupId);
+    }
+
+    @Override
+    public List<TagModel> getTags(Integer recordId) {
+        return tagDAO.findTagsByRecordId(recordId);
     }
 }

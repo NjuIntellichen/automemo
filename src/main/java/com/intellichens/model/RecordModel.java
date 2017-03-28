@@ -1,5 +1,7 @@
 package com.intellichens.model;
 
+import com.intellichens.util.RecordState;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
@@ -19,7 +21,8 @@ public class RecordModel {
 
     private String content;
 
-    private Integer state;
+    @Enumerated(EnumType.STRING)
+    private RecordState state;
 
     @Column(name = "create_at")
     private Date createAt;
@@ -48,11 +51,11 @@ public class RecordModel {
         this.content = content;
     }
 
-    public Integer getState() {
+    public RecordState getState() {
         return state;
     }
 
-    public void setState(Integer state) {
+    public void setState(RecordState state) {
         this.state = state;
     }
 

@@ -12,6 +12,9 @@ import java.util.List;
  * Created by raychen on 2017/3/22.
  */
 public interface UserGroupDAO extends JpaRepository<UserGroupModel, Integer> {
-//    @Query("select ug from UserGroupModel ug where ug.group.id=:gid and ug.user.id=:uid")
-//    UserGroupModel findByGroupAndUser(@Param("uid") Integer uid, @Param("gid") Integer gid);
+    @Query("select ug from UserGroupModel ug where ug.groupId=:gid and ug.userId=:uid")
+    UserGroupModel findByGroupAndUser(@Param("uid") Integer uid, @Param("gid") Integer gid);
+
+    @Query("select ug from UserGroupModel ug where ug.groupId = :gid")
+    List<UserGroupModel> findUserGroupsByGroupId(@Param("gid") Integer gid);
 }

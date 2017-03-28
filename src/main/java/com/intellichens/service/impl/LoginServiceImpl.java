@@ -6,16 +6,25 @@ import com.intellichens.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
- * Created by raychen on 2017/3/21.
+ *
+ * @author raychen, cheney
+ * @date 2017/3/21
+ * @version V1.0
  */
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    private final UserDAO userDAO;
+
     @Autowired
-    private UserDAO userDAO;
+    public LoginServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
     public int login(String phone, String pwd) {
@@ -37,9 +46,15 @@ public class LoginServiceImpl implements LoginService {
             UserModel user = new UserModel();
             user.setPhone(phone);
             user.setPassword(pwd);
+            user.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
             userDAO.saveAndFlush(user);
             return 1;
         }
         return -1;
+    }
+
+    @Override
+    public UserModel getUser(Integer uid) {
+        return userDAO.findOne(uid);
     }
 }

@@ -10,9 +10,12 @@ import java.util.List;
  */
 public interface RecordService {
     int createRecord(Integer userId, Integer groupId, String text);
+    int createRecord(Integer userId);
     int updateRecord(Integer recordId, String text, String topic);
     int removeRecord(Integer recordId);
     int createTags(Integer recordId, List<String> tags);
-    List<RecordModel> getRecords(Integer userId);
-    List<RecordModel> getRecords(Integer userId, Integer groupId);
+    List<RecordModel> getUserRecords(Integer userId);
+    List<RecordModel> getGroupRecords(Integer groupId);
+    RecordModel getRecord(Integer groupId);
+    List<TagModel> getTags(Integer recordId);
 }
