@@ -26,7 +26,15 @@ public class LoginController {
                             HttpSession session) {
         int res = loginService.login(phone, pwd);
         if (res > 0) session.setAttribute("user", res);
-        return ResultUtil.wrapResult(res);
+        else {
+            return ResultUtil.wrapResult(res);
+        }
+        UserModel user = loginService.getUser((Integer) session.getAttribute("user"));
+        JSONObject userObj = UserUtil.convertRecord(user);
+        JSONObject ret = new JSONObject();
+        ret.put("res", 1);
+        ret.put("user", userObj);
+        return ret;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
