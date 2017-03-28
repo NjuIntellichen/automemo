@@ -31,6 +31,7 @@ public class GroupController {
                                   @RequestParam("avatar") String groupAvatar,
                                   HttpSession session){
         Integer uid = (Integer) session.getAttribute("user");
+        if (uid == null) return ResultUtil.wrapResult(-2);
         int res = groupService.createGroup(uid, groupName, description, groupAvatar);
         return ResultUtil.wrapResult(res);
     }
