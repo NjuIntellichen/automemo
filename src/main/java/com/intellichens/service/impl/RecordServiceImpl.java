@@ -9,6 +9,7 @@ import com.intellichens.model.RecordModel;
 import com.intellichens.model.TagModel;
 import com.intellichens.model.UserModel;
 import com.intellichens.service.RecordService;
+import com.intellichens.util.RecordState;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -42,6 +43,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public int createRecord(Integer userId, Integer groupId, String text) {
+       return addRecord(userId,groupId,text,RecordState.finished);
+    }
+
+    private int addRecord(Integer userId, Integer groupId, String text, RecordState state){
         UserModel userModel = userDAO.findOne(userId);
         if (userModel == null) return -1;
         GroupModel groupModel = groupDAO.findOne(groupId);
@@ -49,7 +54,7 @@ public class RecordServiceImpl implements RecordService {
         RecordModel recordModel = new RecordModel();
         recordModel.setUserId(userModel.getId());
         recordModel.setGroupId(groupModel.getId());
-        recordModel.setState(1);
+        recordModel.setState(state);
         recordModel.setContent(text);
         recordModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
         recordDAO.saveAndFlush(recordModel);
@@ -60,7 +65,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public int createRecord(Integer userId, Integer groupId) {
-        return createRecord(userId,groupId,"");
+        return addRecord(userId,groupId,"",RecordState.recording);
     }
 
     @Override

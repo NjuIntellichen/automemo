@@ -133,9 +133,12 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
     }
 
     public static void main(String[] args) {
-        String fileName = "/Users/yuminchen/Desktop/3.wav";
+        String fileName1 = "/Users/yuminchen/Desktop/4.wav";
+        String fileName2 = "/Users/yuminchen/Desktop/5.wav";
         System.out.println();
-        System.out.println(new SpeechTranslateImpl().translateSpeech(fileName));
+        SpeechTranslateImpl speechTranslate = new SpeechTranslateImpl();
+        String first = speechTranslate.translateSpeech(fileName1);
+        System.err.println(first + speechTranslate.translateSpeech(fileName2));
 
     }
 
