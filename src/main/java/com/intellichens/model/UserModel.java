@@ -5,7 +5,10 @@ import java.sql.Date;
 import java.util.List;
 
 /**
- * Created by raychen on 2017/3/23.
+ *
+ * @author raychen, cheney
+ * @date 2017/3/23
+ * @version V1.0
  */
 @Entity
 @Table(name = "user")

@@ -9,6 +9,7 @@ import com.intellichens.model.RecordModel;
 import com.intellichens.model.TagModel;
 import com.intellichens.model.UserModel;
 import com.intellichens.service.RecordService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,11 @@ public class RecordServiceImpl implements RecordService {
         groupModel.setRecord(groupModel.getRecord()+1);
         groupDAO.saveAndFlush(groupModel);
         return 1;
+    }
+
+    @Override
+    public int createRecord(Integer userId, Integer groupId) {
+        return createRecord(userId,groupId,"");
     }
 
     @Override

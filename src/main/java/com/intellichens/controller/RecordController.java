@@ -14,13 +14,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by raychen on 2017/3/22.
+ *
+ * @author raychen, cheney
+ * @date 2017/3/22
+ * @version V1.0
  */
 @RestController
 @RequestMapping("/record/")
 public class RecordController {
+    private final RecordService recordService;
+
     @Autowired
-    private RecordService recordService;
+    public RecordController(RecordService recordService) {
+        this.recordService = recordService;
+    }
+
+    @RequestMapping(value = "ready")
+    @ResponseBody
+    public String readyRecord(@SessionAttribute Integer user, Integer gid){
+        int recordId = recordService.createRecord(user,gid);
+        return String.valueOf(recordId);
+    }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     @ResponseBody
