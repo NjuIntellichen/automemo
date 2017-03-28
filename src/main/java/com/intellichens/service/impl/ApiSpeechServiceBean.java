@@ -3,8 +3,10 @@ package com.intellichens.service.impl;
 import com.intellichens.api.SpeechTranslateAPI;
 import com.intellichens.dao.RecordDAO;
 import com.intellichens.dao.SpeechItemDAO;
+import com.intellichens.model.RecordModel;
 import com.intellichens.model.SpeechItem;
 import com.intellichens.service.ApiSpeechService;
+import com.intellichens.util.RecordState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,13 +52,16 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
 
     @Override
     public String stopSpeech(Integer recordId) {
-        List<SpeechItem> items = speechItemDAO.findByRecordId(recordId);
-        StringBuilder stringBuilder = new StringBuilder();
-        items.forEach(item -> stringBuilder.append(item.getContent()));
+        RecordModel recordModel = recordDAO.findOne(recordId);
+        recordModel.setState(RecordState.finished);
+        recordDAO.saveAndFlush(recordModel);
 
-        String result = stringBuilder.toString();
-        // todo
-        return null;
+        return "1";
+//        List<SpeechItem> items = speechItemDAO.findByRecordId(recordId);
+//        StringBuilder stringBuilder = new StringBuilder();
+//        items.forEach(item -> stringBuilder.append(item.getContent()));
+//
+//        String result = stringBuilder.toString();
     }
 
 }
