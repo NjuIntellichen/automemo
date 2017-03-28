@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * @author yuminchen
@@ -43,11 +44,19 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
 
         speechItemDAO.saveAndFlush(item);
         return "1";
+
     }
 
 
     @Override
     public String stopSpeech(Integer recordId) {
+        List<SpeechItem> items = speechItemDAO.findByRecordId(recordId);
+        StringBuilder stringBuilder = new StringBuilder();
+        items.forEach(item -> stringBuilder.append(item.getContent()));
+
+        String result = stringBuilder.toString();
+        // todo
         return null;
     }
+
 }

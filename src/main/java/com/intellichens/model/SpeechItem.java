@@ -18,6 +18,7 @@ public class SpeechItem {
     @Column(name = "record_id")
     private int recordId;
 
+    @Column(length = 1023)
     private String content;
 
     private Date date;
