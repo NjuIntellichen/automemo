@@ -22,7 +22,6 @@ import java.util.UUID;
  * @version V1.0
  * @date 2017/3/26
  */
-@Service
 public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateAPI {
     private static final String PRE_REG_URI = "https://api.cognitive.microsoft.com/sts/v1.0/issueToken";
     private static final String RECOGNIZE_URI = "https://speech.platform.bing.com/recognize";

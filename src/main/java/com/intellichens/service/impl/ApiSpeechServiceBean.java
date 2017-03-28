@@ -1,6 +1,7 @@
 package com.intellichens.service.impl;
 
 import com.intellichens.api.SpeechTranslateAPI;
+import com.intellichens.api.impl.SpeechTranslateImpl;
 import com.intellichens.dao.RecordDAO;
 import com.intellichens.dao.SpeechItemDAO;
 import com.intellichens.model.RecordModel;
@@ -27,8 +28,8 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
     private final SpeechItemDAO speechItemDAO;
 
     @Autowired
-    public ApiSpeechServiceBean(SpeechTranslateAPI speechTranslateAPI, RecordDAO recordDAO, SpeechItemDAO speechItemDAO) {
-        this.speechTranslateAPI = speechTranslateAPI;
+    public ApiSpeechServiceBean(RecordDAO recordDAO, SpeechItemDAO speechItemDAO) {
+        this.speechTranslateAPI = new SpeechTranslateImpl();
         this.recordDAO = recordDAO;
         this.speechItemDAO = speechItemDAO;
     }
