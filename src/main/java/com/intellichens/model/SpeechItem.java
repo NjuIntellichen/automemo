@@ -21,6 +21,7 @@ public class SpeechItem {
     @Column(length = 1023)
     private String content;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     public int getId() {

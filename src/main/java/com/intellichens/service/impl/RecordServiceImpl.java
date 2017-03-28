@@ -65,7 +65,15 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public int createRecord(Integer userId) {
-        return addRecord(userId,0,"",RecordState.recording);
+        UserModel userModel = userDAO.findOne(userId);
+        if (userModel == null) return -1;
+
+        RecordModel recordModel = new RecordModel();
+        recordModel.setUserId(userModel.getId());
+        recordModel.setState(RecordState.recording);
+        recordModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
+        recordDAO.saveAndFlush(recordModel);
+        return 1;
     }
 
     @Override

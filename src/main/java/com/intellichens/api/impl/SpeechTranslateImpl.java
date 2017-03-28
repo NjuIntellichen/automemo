@@ -77,6 +77,7 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
                     .setParameter("format", format)
                     .setParameter("requestid", requestId)
                     .setParameter("instanceid",requestId)
+                    .setParameter("result.profanitymarkup","0")
                     .setParameter("maxnbest","3")
                     .build();
 
@@ -132,12 +133,12 @@ public class SpeechTranslateImpl extends HttpBuilder implements SpeechTranslateA
     }
 
     public static void main(String[] args) {
-//        String fileName1 = "/Users/yuminchen/Desktop/4.wav";
+        String fileName1 = "/Users/yuminchen/Desktop/2.wav";
 //        String fileName2 = "/Users/yuminchen/Desktop/5.wav";
 //        System.out.println();
-//        SpeechTranslateImpl speechTranslate = new SpeechTranslateImpl();
+        SpeechTranslateImpl speechTranslate = new SpeechTranslateImpl();
 //        String first = speechTranslate.translateSpeech(fileName1);
-//        System.err.println(first + speechTranslate.translateSpeech(fileName2));
+        System.err.println(speechTranslate.translateSpeech(fileName1));
 
     }
 
