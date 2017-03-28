@@ -1,6 +1,8 @@
 package com.intellichens.controller;
 
 import com.intellichens.service.ApiSpeechService;
+import com.intellichens.util.ResultUtil;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +36,7 @@ public class SpeechController {
      */
     @RequestMapping("/receive")
     @ResponseBody
-    public String receiveSpeech(Integer recordId, HttpServletRequest request){
+    public JSONObject receiveSpeech(Integer recordId, HttpServletRequest request){
         try {
             BufferedReader reader = request.getReader();
             char[] buf = new char[512];
@@ -45,7 +47,7 @@ public class SpeechController {
             }
             String content = speechBuilder.toString();
 
-            return apiSpeechService.translateSpeech(recordId, content.getBytes());
+            return ResultUtil.wrapResult(apiSpeechService.translateSpeech(recordId, content.getBytes()));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,8 +63,8 @@ public class SpeechController {
      */
     @RequestMapping("/stop")
     @ResponseBody
-    public String stopSpeech(Integer recordId){
-        return apiSpeechService.stopSpeech(recordId);
+    public JSONObject stopSpeech(Integer recordId){
+        return ResultUtil.wrapResult(apiSpeechService.stopSpeech(recordId));
     }
 
 
