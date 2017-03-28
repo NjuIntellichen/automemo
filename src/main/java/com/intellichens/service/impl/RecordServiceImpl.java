@@ -64,8 +64,8 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public int createRecord(Integer userId, Integer groupId) {
-        return addRecord(userId,groupId,"",RecordState.recording);
+    public int createRecord(Integer userId) {
+        return addRecord(userId,0,"",RecordState.recording);
     }
 
     @Override

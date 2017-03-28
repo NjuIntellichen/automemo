@@ -31,8 +31,8 @@ public class RecordController {
 
     @RequestMapping(value = "ready")
     @ResponseBody
-    public String readyRecord(@SessionAttribute Integer user, Integer gid){
-        int recordId = recordService.createRecord(user,gid);
+    public String readyRecord(@SessionAttribute Integer user){
+        int recordId = recordService.createRecord(user);
         return String.valueOf(recordId);
     }
 
