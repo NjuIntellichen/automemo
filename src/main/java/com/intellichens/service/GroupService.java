@@ -2,6 +2,7 @@ package com.intellichens.service;
 
 import com.intellichens.model.GroupModel;
 import com.intellichens.model.UserGroupModel;
+import com.intellichens.model.UserModel;
 
 import java.util.List;
 
@@ -18,4 +19,5 @@ public interface GroupService {
     int doApply(Integer aid, boolean accept);
     GroupModel searchGroup(Integer gid);
     List<UserGroupModel> getApplies(Integer gid);
+    List<UserModel> getUsers(Integer gid);
 }
