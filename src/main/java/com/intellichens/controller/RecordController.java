@@ -1,9 +1,11 @@
 package com.intellichens.controller;
 
 import com.intellichens.model.RecordModel;
+import com.intellichens.model.TagModel;
 import com.intellichens.service.RecordService;
 import com.intellichens.util.ResultUtil;
 import com.intellichens.util.model_util.RecordUtil;
+import com.intellichens.util.model_util.TagUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +104,16 @@ public class RecordController {
                                    @RequestParam("title") String title){
         int res = recordService.updateRecord(rid, text, title);
         return ResultUtil.wrapResult(res);
+    }
+
+    @RequestMapping(value = "{rid}/tags", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONArray getTags(@PathVariable("rid") Integer rid){
+        List<TagModel> tags = recordService.getTags(rid);
+        JSONArray ret = new JSONArray();
+        for (TagModel tag: tags) {
+            ret.add(TagUtil.convertRecord(tag));
+        }
+        return ret;
     }
 }
