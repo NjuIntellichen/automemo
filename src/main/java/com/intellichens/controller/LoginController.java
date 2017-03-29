@@ -32,8 +32,10 @@ public class LoginController {
         UserModel user = loginService.getUser((Integer) session.getAttribute("user"));
         JSONObject userObj = UserUtil.convertRecord(user);
         JSONObject ret = new JSONObject();
+        String sessionId = session.getId();
         ret.put("res", 1);
         ret.put("user", userObj);
+        ret.put("sessionId", sessionId);
         return ret;
     }
 
