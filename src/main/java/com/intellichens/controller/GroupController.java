@@ -40,7 +40,14 @@ public class GroupController {
     @ResponseBody
     public JSONObject searchGroup(@PathVariable("gid") Integer gid){
         GroupModel group = groupService.searchGroup(gid);
-        return GroupUtil.convertRecord(group);
+        JSONObject ret = new JSONObject();
+        if (group == null){
+            ret.put("res", -1);
+        } else {
+            ret.put("res", 1);
+            ret.put("group", GroupUtil.convertRecord(group));
+        }
+        return ret;
     }
 
     @RequestMapping(value = "get/my/{uid}", method = RequestMethod.GET)
