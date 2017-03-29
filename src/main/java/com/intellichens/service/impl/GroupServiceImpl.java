@@ -64,17 +64,18 @@ public class GroupServiceImpl implements GroupService {
     public int createGroup(Integer userId, String groupName, String description, String groupAvatar) {
         UserModel user = userDAO.findOne(userId);
         if (user == null) return -1;
+        Integer gid = RandomUtil.getRandomId();
         GroupModel groupModel = new GroupModel();
         groupModel.setGroupName(groupName);
         groupModel.setDescription(description);
         groupModel.setGroupAvatar(groupAvatar);
         groupModel.setLeaderId(userId);
-        groupModel.setGroupId(RandomUtil.getRandomId());
+        groupModel.setGroupId(gid);
         groupModel.setPeople(1);
         groupModel.setRecord(0);
         groupModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
         groupDAO.saveAndFlush(groupModel);
-        return 1;
+        return gid;
     }
 
     @Override
