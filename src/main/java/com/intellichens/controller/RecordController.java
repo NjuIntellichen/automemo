@@ -94,4 +94,13 @@ public class RecordController {
         int res = recordService.removeRecord(rid);
         return ResultUtil.wrapResult(res);
     }
+
+    @RequestMapping(value = "{rid}/update", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject updateRecord(@PathVariable("rid") Integer rid,
+                                   @RequestParam("text") String text,
+                                   @RequestParam("title") String title){
+        int res = recordService.updateRecord(rid, text, title);
+        return ResultUtil.wrapResult(res);
+    }
 }

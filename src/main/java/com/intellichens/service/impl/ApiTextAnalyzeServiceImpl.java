@@ -2,7 +2,12 @@ package com.intellichens.service.impl;
 
 import com.intellichens.service.ApiTextAnalyzeService;
 import com.intellichens.api.impl.TextAnalyzeImpl;
+import com.intellichens.service.RecordService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by raychen on 2017/3/24.
@@ -10,14 +15,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApiTextAnalyzeServiceImpl implements ApiTextAnalyzeService {
 
-    TextAnalyzeImpl builder;
+    TextAnalyzeImpl analyzer;
+    @Autowired
+    private RecordService recordService;
 
     public ApiTextAnalyzeServiceImpl(){
-        builder = new TextAnalyzeImpl();
+        analyzer = new TextAnalyzeImpl();
     }
 
     @Override
-    public int analyzeText(String text) {
-        return 0;
+    public int analyzeText(String text, Integer recordId) {
+        return recordService.updateRecord(recordId, text, new Date(Calendar.getInstance().getTimeInMillis()).toString());
     }
 }
