@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by raychen on 2017/3/21.
+ *
+ * @author raychen, cheney
+ * @date 2017/3/21
+ * @version V1.0
  */
 @RestController
 public class LoginController {

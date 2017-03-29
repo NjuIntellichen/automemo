@@ -7,5 +7,6 @@ package com.intellichens.util;
  */
 public enum RecordState {
     recording,
+    analysing,
     finished
 }
