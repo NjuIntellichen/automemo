@@ -9,4 +9,6 @@ public interface ApiSpeechService {
     String translateSpeech(Integer recordId, byte[] speech);
 
     String stopSpeech(Integer recordId);
+
+    int cancel(Integer recordId);
 }

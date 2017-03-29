@@ -54,15 +54,27 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
     @Override
     public String stopSpeech(Integer recordId) {
         RecordModel recordModel = recordDAO.findOne(recordId);
+        if(recordModel==null) return null;
+
         recordModel.setState(RecordState.analysing);
         recordDAO.saveAndFlush(recordModel);
 
-        return "1";
-//        List<SpeechItem> items = speechItemDAO.findByRecordId(recordId);
-//        StringBuilder stringBuilder = new StringBuilder();
-//        items.forEach(item -> stringBuilder.append(item.getContent()));
-//
-//        String result = stringBuilder.toString();
+        return speechItemDAO
+                .findByRecordId(recordId)
+                .stream()
+                .map(SpeechItem::getContent)
+                .reduce("", String::concat);
+
+    }
+
+    @Override
+    public int cancel(Integer recordId) {
+        RecordModel recordModel = recordDAO.findOne(recordId);
+        if(recordModel==null) return -1;
+        recordModel.setState(RecordState.cancel);
+        recordDAO.saveAndFlush(recordModel);
+        speechItemDAO.delete(speechItemDAO.findByRecordId(recordId));
+        return 1;
     }
 
 }

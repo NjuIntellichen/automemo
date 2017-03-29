@@ -1,6 +1,7 @@
 package com.intellichens.controller;
 
 import com.intellichens.service.ApiSpeechService;
+import com.intellichens.service.ApiTextAnalyzeService;
 import com.intellichens.util.ResultUtil;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,12 @@ import java.io.IOException;
 public class SpeechController {
 
     private final ApiSpeechService apiSpeechService;
+    private final ApiTextAnalyzeService apiTextAnalyzeService;
 
     @Autowired
-    public SpeechController(ApiSpeechService apiSpeechService) {
+    public SpeechController(ApiSpeechService apiSpeechService, ApiTextAnalyzeService apiTextAnalyzeService) {
         this.apiSpeechService = apiSpeechService;
+        this.apiTextAnalyzeService = apiTextAnalyzeService;
     }
 
     /**
@@ -67,9 +70,23 @@ public class SpeechController {
     @RequestMapping("/stop")
     @ResponseBody
     public JSONObject stopSpeech(Integer recordId){
-        return ResultUtil.wrapResult(apiSpeechService.stopSpeech(recordId));
+        String content = apiSpeechService.stopSpeech(recordId);
+        if(content==null){
+            return ResultUtil.wrapResult(-1);
+        }
+        return ResultUtil.wrapResult(apiTextAnalyzeService.analyzeText(content,recordId));
     }
 
+    /**
+     *
+     * @param recordId
+     * @return if the operation is success
+     */
+    @RequestMapping("/cancel")
+    @ResponseBody
+    public JSONObject cancel(Integer recordId){
+        return ResultUtil.wrapResult(apiSpeechService.cancel(recordId));
+    }
 
 
 }
