@@ -93,6 +93,7 @@ public class RecordServiceImpl implements RecordService {
         RecordModel recordModel = recordDAO.findOne(recordId);
         if (recordModel == null) return -1;
         if (tags.size() == 0) return -2;
+        tagDAO.deleteByRid(recordId);
         for (String tag: tags) {
             TagModel tagModel = new TagModel();
             tagModel.setTagName(tag);
