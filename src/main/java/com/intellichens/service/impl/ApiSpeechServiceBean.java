@@ -54,7 +54,7 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
     @Override
     public String stopSpeech(Integer recordId) {
         RecordModel recordModel = recordDAO.findOne(recordId);
-        recordModel.setState(RecordState.finished);
+        recordModel.setState(RecordState.analysing);
         recordDAO.saveAndFlush(recordModel);
 
         return "1";
