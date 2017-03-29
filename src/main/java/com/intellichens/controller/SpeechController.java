@@ -37,6 +37,8 @@ public class SpeechController {
     @RequestMapping("/receive")
     @ResponseBody
     public JSONObject receiveSpeech(Integer recordId, HttpServletRequest request){
+        System.err.println(recordId);
+
         try {
             BufferedReader reader = request.getReader();
             char[] buf = new char[512];
@@ -47,6 +49,7 @@ public class SpeechController {
             }
             String content = speechBuilder.toString();
 
+            System.err.println("content: " + content.substring(0,100));
             return ResultUtil.wrapResult(apiSpeechService.translateSpeech(recordId, content.getBytes()));
 
         } catch (IOException e) {
@@ -59,7 +62,7 @@ public class SpeechController {
     /**
      *
      * @param recordId
-     * @return the result of analysis
+     * @return if the operation is success
      */
     @RequestMapping("/stop")
     @ResponseBody
