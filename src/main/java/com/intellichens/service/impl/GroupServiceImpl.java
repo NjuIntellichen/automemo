@@ -126,4 +126,9 @@ public class GroupServiceImpl implements GroupService {
         return userGroupDAO.findUserGroupsByGroupId(gid);
     }
 
+    @Override
+    public List<UserModel> getUsers(Integer gid) {
+        return userDAO.findByGroupId(gid);
+    }
+
 }

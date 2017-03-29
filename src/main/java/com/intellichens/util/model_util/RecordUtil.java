@@ -10,6 +10,7 @@ public class RecordUtil {
     public static JSONObject convertRecord(RecordModel record){
         JSONObject obj = new JSONObject();
         obj.put("rid", record.getId());
+        obj.put("record_name", record.getTopic());
         obj.put("user_id", record.getUserId());
         obj.put("group_id", record.getGroupId());
         obj.put("content", record.getContent());
