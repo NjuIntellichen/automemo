@@ -46,6 +46,7 @@ public class LoginServiceImpl implements LoginService {
             UserModel user = new UserModel();
             user.setPhone(phone);
             user.setPassword(pwd);
+            user.setUserName("Memor"+phone);
             user.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
             userDAO.saveAndFlush(user);
             return 1;
