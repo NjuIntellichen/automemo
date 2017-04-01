@@ -38,9 +38,9 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
     @Override
     public String translateSpeech(Integer recordId, byte[] speech) {
         String content = speechTranslateAPI.translateSpeech(speech);
-        if(content==null){
-            return "0";
-        }
+//        if(content==null){
+//            return "0";
+//        }
         SpeechItem item = new SpeechItem();
         item.setContent(content);
         item.setRecordId(recordId);
@@ -52,12 +52,12 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
     }
 
     @Override
-    public String continueSpeech(Integer recordId, byte[] speech) {
+    public String continueSpeech(Integer recordId) {
         RecordModel recordModel = recordDAO.findOne(recordId);
+        if(recordModel==null) return "-1";
         recordModel.setState(RecordState.recording);
         recordDAO.saveAndFlush(recordModel);
-
-        return translateSpeech(recordId,speech);
+        return "1";
     }
 
 

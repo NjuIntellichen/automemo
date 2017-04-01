@@ -45,8 +45,8 @@ public class SpeechController {
 
     @RequestMapping("/continue")
     @ResponseBody
-    public JSONObject continueSpeech(Integer recordId, HttpServletRequest request){
-        return speechTranslator(recordId,request,apiSpeechService::continueSpeech);
+    public JSONObject continueSpeech(Integer recordId){
+        return ResultUtil.wrapResult(apiSpeechService.continueSpeech(recordId));
     }
 
     /**
