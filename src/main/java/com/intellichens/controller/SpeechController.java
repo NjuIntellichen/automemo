@@ -86,7 +86,6 @@ public class SpeechController {
             }
             String content = speechBuilder.toString();
 
-            System.err.println("content: " + content.substring(0,100));
             return ResultUtil.wrapResult(translator.translate(recordId, content.getBytes()));
 
         } catch (IOException e) {
