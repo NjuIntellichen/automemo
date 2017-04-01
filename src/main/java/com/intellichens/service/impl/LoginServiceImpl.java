@@ -27,16 +27,16 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public int login(String phone, String pwd) {
+    public UserModel login(String phone, String pwd) {
         List<UserModel> users = userDAO.findByPhone(phone);
         if (users == null || users.size() == 0){
-            return 0;
+            return null;
         }
         UserModel user = users.get(0);
         if (user.getPassword().equals(pwd)){
-            return user.getId();
+            return user;
         }
-        return -1;
+        return null;
     }
 
     @Override
