@@ -26,6 +26,6 @@ public class ApiTextAnalyzeServiceImpl implements ApiTextAnalyzeService {
     @Override
     public int analyzeText(String text, Integer recordId) {
         String tags = analyzer.getKeys(text);
-        return recordService.updateRecord(recordId, text, new Date(Calendar.getInstance().getTimeInMillis()).toString());
+        return recordService.updateRecord(recordId, text, null, true);
     }
 }

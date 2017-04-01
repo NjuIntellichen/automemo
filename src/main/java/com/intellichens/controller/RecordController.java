@@ -102,7 +102,7 @@ public class RecordController {
     public JSONObject updateRecord(@PathVariable("rid") Integer rid,
                                    @RequestParam("text") String text,
                                    @RequestParam("title") String title){
-        int res = recordService.updateRecord(rid, text, title);
+        int res = recordService.updateRecord(rid, text, title, false);
         return ResultUtil.wrapResult(res);
     }
 

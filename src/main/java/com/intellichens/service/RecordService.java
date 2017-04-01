@@ -11,7 +11,7 @@ import java.util.List;
 public interface RecordService {
     int createRecord(Integer userId, Integer groupId, String text);
     int createRecord(Integer userId,Integer groupId);
-    int updateRecord(Integer recordId, String text, String topic);
+    int updateRecord(Integer recordId, String text, String topic, boolean append);
     int removeRecord(Integer recordId);
     int createTags(Integer recordId, List<String> tags);
     List<RecordModel> getUserRecords(Integer userId);

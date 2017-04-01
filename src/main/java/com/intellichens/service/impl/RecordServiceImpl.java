@@ -70,11 +70,18 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public int updateRecord(Integer recordId, String text, String topic) {
+    public int updateRecord(Integer recordId, String text, String topic, boolean append) {
         RecordModel record = recordDAO.findOne(recordId);
         if (record == null) return -1;
-        if (text!=null) record.setContent(text);
+        String old = "";
+        if (append && record.getContent()!=null){
+            old += record.getContent();
+        }
+        if (text!=null) record.setContent(old+text);
         if (topic!=null) record.setTopic(topic);
+        else if (record.getTopic() == null){
+            record.setTopic(new Date(Calendar.getInstance().getTimeInMillis()).toString());
+        }
         recordDAO.saveAndFlush(record);
         return 1;
     }
