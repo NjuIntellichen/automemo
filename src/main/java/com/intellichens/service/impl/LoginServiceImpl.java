@@ -32,11 +32,10 @@ public class LoginServiceImpl implements LoginService {
         if (users == null || users.size() == 0){
             return null;
         }
-        UserModel user = users.get(0);
-        if (user.getPassword().equals(pwd)){
-            return user;
-        }
-        return null;
+        return users
+                .stream()
+                .filter(o -> pwd.equals(o.getPassword()))
+                .reduce(null,(o1,o2)->o2);
     }
 
     @Override

@@ -49,7 +49,7 @@ public class RecordServiceImpl implements RecordService {
     private int addRecord(Integer userId, Integer groupId, String text, RecordState state){
         UserModel userModel = userDAO.findOne(userId);
         if (userModel == null) return -1;
-        GroupModel groupModel = groupDAO.findOne(groupId);
+        GroupModel groupModel = groupDAO.findGroupByGroupId(groupId);
         if (groupModel == null) return -1;
         RecordModel recordModel = new RecordModel();
         recordModel.setUserId(userModel.getId());
