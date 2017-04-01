@@ -8,6 +8,7 @@ import com.intellichens.model.RecordModel;
 import com.intellichens.model.SpeechItem;
 import com.intellichens.service.ApiSpeechService;
 import com.intellichens.util.RecordState;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,15 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
 
     }
 
+    @Override
+    public String continueSpeech(Integer recordId, byte[] speech) {
+        RecordModel recordModel = recordDAO.findOne(recordId);
+        recordModel.setState(RecordState.recording);
+        recordDAO.saveAndFlush(recordModel);
+
+        return translateSpeech(recordId,speech);
+    }
+
 
     @Override
     public String stopSpeech(Integer recordId) {
@@ -76,5 +86,6 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
         speechItemDAO.delete(speechItemDAO.findByRecordId(recordId));
         return 1;
     }
+
 
 }
