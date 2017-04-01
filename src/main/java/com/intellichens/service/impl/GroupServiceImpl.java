@@ -79,6 +79,7 @@ public class GroupServiceImpl implements GroupService {
         UserGroupModel userGroupModel = new UserGroupModel();
         userGroupModel.setGroupId(gid);
         userGroupModel.setUserId(userId);
+        userGroupModel.setState(0);
         userGroupModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
         userGroupDAO.saveAndFlush(userGroupModel);
 
