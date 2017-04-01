@@ -40,26 +40,13 @@ public class SpeechController {
     @RequestMapping("/receive")
     @ResponseBody
     public JSONObject receiveSpeech(Integer recordId, HttpServletRequest request){
-        System.err.println(recordId);
+        return speechTranslator(recordId,request,apiSpeechService::translateSpeech);
+    }
 
-        try {
-            BufferedReader reader = request.getReader();
-            char[] buf = new char[512];
-            int len;
-            StringBuilder speechBuilder = new StringBuilder();
-            while ((len = reader.read(buf)) != -1) {
-                speechBuilder.append(buf, 0, len);
-            }
-            String content = speechBuilder.toString();
-
-            System.err.println("content: " + content.substring(0,100));
-            return ResultUtil.wrapResult(apiSpeechService.translateSpeech(recordId, content.getBytes()));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    @RequestMapping("/continue")
+    @ResponseBody
+    public JSONObject continueSpeech(Integer recordId, HttpServletRequest request){
+        return speechTranslator(recordId,request,apiSpeechService::continueSpeech);
     }
 
     /**
@@ -88,5 +75,28 @@ public class SpeechController {
         return ResultUtil.wrapResult(apiSpeechService.cancel(recordId));
     }
 
+    private JSONObject speechTranslator(Integer recordId, HttpServletRequest request, Translator translator){
+        try {
+            BufferedReader reader = request.getReader();
+            char[] buf = new char[512];
+            int len;
+            StringBuilder speechBuilder = new StringBuilder();
+            while ((len = reader.read(buf)) != -1) {
+                speechBuilder.append(buf, 0, len);
+            }
+            String content = speechBuilder.toString();
 
+            System.err.println("content: " + content.substring(0,100));
+            return ResultUtil.wrapResult(translator.translate(recordId, content.getBytes()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    interface Translator{
+        String translate(Integer recordId, byte[] speech);
+    }
 }

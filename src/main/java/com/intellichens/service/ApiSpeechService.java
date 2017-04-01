@@ -8,7 +8,11 @@ package com.intellichens.service;
 public interface ApiSpeechService {
     String translateSpeech(Integer recordId, byte[] speech);
 
+    String continueSpeech(Integer recordId, byte[] speech);
+
     String stopSpeech(Integer recordId);
 
     int cancel(Integer recordId);
+
+
 }

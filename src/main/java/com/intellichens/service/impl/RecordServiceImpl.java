@@ -49,7 +49,7 @@ public class RecordServiceImpl implements RecordService {
     private int addRecord(Integer userId, Integer groupId, String text, RecordState state){
         UserModel userModel = userDAO.findOne(userId);
         if (userModel == null) return -1;
-        GroupModel groupModel = groupDAO.findOne(groupId);
+        GroupModel groupModel = groupDAO.findGroupByGroupId(groupId);
         if (groupModel == null) return -1;
         RecordModel recordModel = new RecordModel();
         recordModel.setUserId(userModel.getId());
@@ -57,10 +57,11 @@ public class RecordServiceImpl implements RecordService {
         recordModel.setState(state);
         recordModel.setContent(text);
         recordModel.setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
-        recordDAO.saveAndFlush(recordModel);
+
+        RecordModel result = recordDAO.saveAndFlush(recordModel);
         groupModel.setRecord(groupModel.getRecord()+1);
         groupDAO.saveAndFlush(groupModel);
-        return 1;
+        return result.getId();
     }
 
     @Override

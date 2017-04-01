@@ -27,13 +27,10 @@ public class LoginController {
     public JSONObject login(@RequestParam("phone") String phone,
                             @RequestParam("pwd") String pwd,
                             HttpSession session) {
-        int res = loginService.login(phone, pwd);
-        if (res > 0) session.setAttribute("user", res);
-        else {
-            return ResultUtil.wrapResult(res);
-        }
-        UserModel user = loginService.getUser((Integer) session.getAttribute("user"));
-        JSONObject userObj = UserUtil.convertRecord(user);
+        UserModel userModel = loginService.login(phone, pwd);
+        if (userModel == null) return ResultUtil.wrapResult(-1);
+        session.setAttribute("user",userModel.getId());
+        JSONObject userObj = UserUtil.convertRecord(userModel);
         JSONObject ret = new JSONObject();
         String sessionId = session.getId();
         ret.put("res", 1);
