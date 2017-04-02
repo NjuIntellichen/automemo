@@ -47,7 +47,7 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
             .append("The uses for VR\n")
             .append("\tVR can be used to improve gaming experience.\n")
             .append("\tVR can be used to improve audience participation.\n")
-            .append("\tVR can be used in medical, educational and other fields. For example, to help doctors solving medical problem and help teachers with their lecture.\n")
+            .append("\tVR can be used in medical, educational and other fields.\n")
             .append("\tThere are many uses for VR and when we present the content, we can display some typical use of this scenarios\n")
             .append("\n")
             .toString();
