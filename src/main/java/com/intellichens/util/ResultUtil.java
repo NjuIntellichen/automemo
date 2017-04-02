@@ -18,4 +18,8 @@ public class ResultUtil {
         obj.put("res", result);
         return obj;
     }
+
+    public static String formatString(String origin){
+        return origin.replace(' ', '_');
+    }
 }

@@ -6,11 +6,15 @@ import com.intellichens.api.impl.EntityLinkImpl;
 import com.intellichens.api.impl.SpeechTranslateImpl;
 import com.intellichens.dao.RecordDAO;
 import com.intellichens.dao.SpeechItemDAO;
+import com.intellichens.dao.TagDAO;
 import com.intellichens.model.RecordModel;
 import com.intellichens.model.SpeechItem;
+import com.intellichens.model.TagModel;
 import com.intellichens.service.ApiSpeechService;
 import com.intellichens.util.RecordState;
-import org.json.simple.JSONObject;
+import com.intellichens.util.ResultUtil;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +34,8 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
     private final RecordDAO recordDAO;
     private final SpeechItemDAO speechItemDAO;
     private final EntityLinkAPI entityLinkAPI;
-    private String content1 = new StringBuffer("Key Words : VR, introduction, uses, implementation\n")
-            .append("Content:\n")
-            .append("There are 3 key points\n")
+    private final TagDAO tagDAO;
+    private String content1 = new StringBuffer("There are 3 key points\n")
             .append("\tThe introduction of VR\n")
             .append("\tThe uses for VR\n")
             .append("\tThe implementation of VR\n")
@@ -56,11 +59,11 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
             .append("\n")
             .toString();
 
-
     @Autowired
-    public ApiSpeechServiceBean(RecordDAO recordDAO, SpeechItemDAO speechItemDAO) {
+    public ApiSpeechServiceBean(RecordDAO recordDAO, SpeechItemDAO speechItemDAO, TagDAO tagDAO) {
         this.speechTranslateAPI = new SpeechTranslateImpl();
         this.entityLinkAPI = new EntityLinkImpl();
+        this.tagDAO = tagDAO;
         this.recordDAO = recordDAO;
         this.speechItemDAO = speechItemDAO;
     }
@@ -87,10 +90,40 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
         if(recordModel==null) return null;
 
         if(recordModel.getState()==RecordState.recording){
-            return content1 + entityLinkAPI.getEntities(content1,null,0);
+            TagModel tagModel = new TagModel("VR");
+            tagModel.setRecordId(recordId);
+            tagDAO.save(tagModel);
+
+            TagModel tagModel1 = new TagModel("introduction");
+            tagModel1.setRecordId(recordId);
+            tagDAO.save(tagModel1);
+
+            TagModel tagModel2 = new TagModel("uses");
+            tagModel2.setRecordId(recordId);
+            tagDAO.save(tagModel2);
+
+            TagModel tagModel3 = new TagModel("implementation");
+            tagModel3.setRecordId(recordId);
+            tagDAO.saveAndFlush(tagModel3);
+
+            return content1 + getReference(content1);
         }
 
-        return content1 + content2 + entityLinkAPI.getEntities(content1+content2,null,0);
+        return content1 + content2 + getReference(content1+content2);
+    }
+
+    private String getReference (String text){
+        StringBuilder sb = new StringBuilder("Reference:\n");
+
+        JSONObject json = new JSONObject(entityLinkAPI.getEntities(text,null,0));
+        JSONArray jsonArray = (JSONArray) json.get("entities");
+        for (int i = 0; i<jsonArray.length();i++){
+            JSONObject subObj = jsonArray.getJSONObject(i);
+
+            sb.append(subObj.get("name") + " : ").append("https://en.wikipedia.org/wiki/" + ResultUtil.formatString((String) subObj.get("wikipediaId")) + "\n");
+        }
+
+        return sb.toString();
     }
 
     @Override

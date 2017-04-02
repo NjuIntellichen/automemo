@@ -2,6 +2,7 @@ package com.intellichens.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Calendar;
 
 /**
  *
@@ -75,5 +76,14 @@ public class TagModel {
 
     public void setRecordId(int recordId) {
         this.recordId = recordId;
+    }
+
+    public TagModel() {
+    }
+
+    public TagModel(String tagName) {
+        this.tagName = tagName;
+        setCreateAt(new Date(Calendar.getInstance().getTimeInMillis()));
+
     }
 }
