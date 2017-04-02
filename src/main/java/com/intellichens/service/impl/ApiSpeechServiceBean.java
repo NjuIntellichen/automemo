@@ -106,10 +106,14 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
             tagModel3.setRecordId(recordId);
             tagDAO.saveAndFlush(tagModel3);
 
-            return content1 + getReference(content1);
+            recordModel.setContent(content1 + getReference(content1));
+            recordDAO.saveAndFlush(recordModel);
+            return "1";
         }
 
-        return content1 + content2 + getReference(content1+content2);
+        recordModel.setContent(content1 + content2 + getReference(content1+content2));
+        recordDAO.saveAndFlush(recordModel);
+        return "1";
     }
 
     private String getReference (String text){
