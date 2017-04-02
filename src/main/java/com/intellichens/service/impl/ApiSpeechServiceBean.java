@@ -107,6 +107,7 @@ public class ApiSpeechServiceBean implements ApiSpeechService{
             tagDAO.saveAndFlush(tagModel3);
 
             recordModel.setContent(content1 + getReference(content1));
+            recordModel.setTopic(new Date(Calendar.getInstance().getTimeInMillis()).toString());
             recordDAO.saveAndFlush(recordModel);
             return "1";
         }
