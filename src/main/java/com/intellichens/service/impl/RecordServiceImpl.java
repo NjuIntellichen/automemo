@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.Calendar;
@@ -87,6 +88,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    @Transactional
     public int removeRecord(Integer recordId) {
         RecordModel record = recordDAO.findOne(recordId);
         GroupModel groupModel = groupDAO.findOne(record.getGroupId());
@@ -97,6 +99,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    @Transactional
     public int createTags(Integer recordId, List<String> tags) {
         RecordModel recordModel = recordDAO.findOne(recordId);
         if (recordModel == null) return -1;
