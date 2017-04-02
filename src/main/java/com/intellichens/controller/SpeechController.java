@@ -57,11 +57,12 @@ public class SpeechController {
     @RequestMapping("/stop")
     @ResponseBody
     public JSONObject stopSpeech(Integer recordId){
-        String content = apiSpeechService.stopSpeech(recordId);
-        if(content==null){
-            return ResultUtil.wrapResult(-1);
-        }
-        return ResultUtil.wrapResult(apiTextAnalyzeService.analyzeText(content,recordId));
+        return ResultUtil.wrapResult(apiSpeechService.translateSpeechTest(recordId));
+//        String content = apiSpeechService.stopSpeech(recordId);
+//        if(content==null){
+//            return ResultUtil.wrapResult(-1);
+//        }
+//        return ResultUtil.wrapResult(apiTextAnalyzeService.analyzeText(content,recordId));
     }
 
     /**
