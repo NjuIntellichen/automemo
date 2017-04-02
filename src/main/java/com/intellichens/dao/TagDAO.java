@@ -2,6 +2,7 @@ package com.intellichens.dao;
 
 import com.intellichens.model.TagModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,6 @@ public interface TagDAO extends JpaRepository<TagModel, Integer> {
     List<TagModel> findTagsByRecordId(@Param("rid")Integer rid);
 
     @Query("delete from TagModel tag where tag.recordId=:rid")
-    @Transactional
+    @Modifying
     void deleteByRid(@Param("rid") Integer rid);
 }
